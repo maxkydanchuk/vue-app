@@ -1,4 +1,4 @@
-# vue-js-course
+# mediumclone-frontend
 
 ## Project setup
 ```

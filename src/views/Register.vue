@@ -1,0 +1,110 @@
+<template>
+  <div class="auth-page">
+    <div class="container page">
+      <div class="row">
+        <div class="col-md-6 offset-md-3 col-xs-12">
+          <h1 class="text-xs-center">Sign up</h1>
+          <p class="text-xs-center">
+            <router-link :to="{ name: 'register' }"
+              >Have an account?</router-link
+            >
+          </p>
+          <va-validation-errors
+            v-if="validationErrors"
+            :validation-errors="validationErrors"
+          ></va-validation-errors>
+          <form @submit.prevent="onSubmit">
+            <fieldset class="form-group">
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                placeholder="Username"
+                v-model="username"
+              />
+            </fieldset>
+            <fieldset class="form-group">
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                placeholder="Email"
+                v-model="email"
+              />
+            </fieldset>
+            <fieldset class="form-group">
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                placeholder="Password"
+                v-model="password"
+              />
+            </fieldset>
+            <button
+              :disabled="isSubmitted"
+              class="btn btn-lg btn-primary pull-xs-right"
+            >
+              Sign up
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { defineComponent, computed, ref } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import VaValidationErrors from '@/components/UI/ValidationErros';
+import { actionTypes } from '@/store/modules/auth';
+
+export default defineComponent({
+  name: 'VaRegister',
+  components: {
+    VaValidationErrors,
+  },
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const email = ref('');
+    const password = ref('');
+    const username = ref('');
+
+    const onSubmit = () => {
+      store
+        .dispatch(actionTypes.register, {
+          email: email.value,
+          username: username.value,
+          password: password.value,
+        })
+        .then(() => {
+          router.push({ name: 'globalFeed' });
+        });
+    };
+
+    const isSubmitted = computed(() => {
+      return store.state.auth.isSubmitted;
+    });
+
+    const validationErrors = computed(() => {
+      return store.state.auth.validationErrors;
+    });
+
+    console.log(validationErrors);
+    return {
+      onSubmit,
+      isSubmitted,
+      email,
+      password,
+      username,
+      validationErrors,
+    };
+  },
+});
+</script>
+
+<style lang="scss" scoped>
+:deep(.container page) {
+  width: 100%;
+}
+</style>

@@ -1,19 +1,29 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <va-topbar />
+  <router-view />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { defineComponent, onMounted } from 'vue';
+import { actionTypes } from '@/store/modules/auth';
+import { useStore } from 'vuex';
 
-export default {
-  name: 'App',
+import VaTopbar from '@/components/Topbar';
+
+export default defineComponent({
+  name: 'VaApp',
   components: {
-    HelloWorld
-  }
-}
-</script>
+    VaTopbar,
+  },
+  setup() {
+    const store = useStore();
 
+    onMounted(() => {
+      store.dispatch(actionTypes.getCurrentUser);
+    });
+  },
+});
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -21,6 +31,18 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+nav {
+  padding: 30px;
+}
+
+nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>
