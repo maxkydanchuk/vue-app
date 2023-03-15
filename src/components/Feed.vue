@@ -111,4 +111,8 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+:deep(.container page) {
+  width: 100%;
+}
+</style>
